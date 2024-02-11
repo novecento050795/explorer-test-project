@@ -21,6 +21,15 @@ const files = computed(() => store.getters.files)
           <File class="p-2" v-for="file in files" :file="file"/>
         </tbody>
       </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-skip-backward-fill"></i></a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#"><i class="bi bi-skip-forward-fill"></i></a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>

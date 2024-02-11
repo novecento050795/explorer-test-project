@@ -17,7 +17,7 @@ class FileController extends Controller
         $search = $request->search;
 
         $files = File::when($request->search, function($fileQuery) use ($search) {
-            $fileQuery->where('name', 'like', $search);
+            $fileQuery->where('name', 'ilike', "%$search%");
         })->paginate(50);
 
         return FileResource::collection($files);

@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
+import { type IFileQueryParams } from '@/interfaces';
+import { RouterView, useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 import {  onMounted } from 'vue'
 
 const store = useStore()
-const loadfiles = (search: string|null = null) => store.dispatch('loadFiles', {search});
+const route = useRoute()
+const router = useRouter()
+
+const loadFiles = async () => {    
+  await router.isReady()
+  const params = {} as IFileQueryParams
+  if (route.query && route.query.search) params.search = route.query.search.toString()
+  store.dispatch('loadFiles', params)
+};
 
 onMounted(() => {
-  loadfiles();
+  loadFiles();
 })
 </script>
 

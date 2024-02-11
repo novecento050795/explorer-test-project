@@ -6,3 +6,8 @@ export interface IFile {
   type: string;
   extension: string;
 }
+
+export interface IFileQueryParams {
+  page: number;
+  search: string;
+}
