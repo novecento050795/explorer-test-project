@@ -14,6 +14,12 @@ class FileResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return array_merge(
+            parent::toArray($request),
+            [
+                'size' => round($this->size / 1000000, 3),
+                'created_at' => $this->created_at->format('d.m.Y H:i:s')
+            ]
+        );
     }
 }

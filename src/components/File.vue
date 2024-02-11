@@ -35,8 +35,8 @@ const deleteFile = () => {
   <tr>
       <td><i class="bi bi-file-earmark-fill"></i></td>
       <td>{{ file.name }}</td>
-      <td>{{ file.size }}</td>
-      <td>{{ file.type }}</td>
+      <td>{{ file.extension }}</td>
+      <td>{{ file.size }} MB</td>
       <td>{{ file.created_at }}</td>
       <td class="d-flex justify-content-between">
         <i @click="downloadFile" type="button" class="button bi bi-download text-success"></i>
