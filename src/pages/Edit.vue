@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import type { IFile } from '@/interfaces';
 import axios from "axios";
 import router from '@/router';
+import { send } from '@/helpers/axios'
 
 const store = useStore()
 const route = useRoute()
@@ -13,9 +14,10 @@ const fileId = route.query && route.query.id
 const file = store.getters.fileById(fileId) as IFile
 const state = reactive({
   nameInput: file && file.name,
-  fileInput: null
+  fileInput: null,
+  progress: 0
 });
-const { nameInput, fileInput } = toRefs(state)
+const { nameInput, fileInput, progress } = toRefs(state)
 
 const onFileInput = (event: any) => {
   state.fileInput = event.target.files[0]
@@ -25,33 +27,27 @@ const editFile = () => {
   let formData = new FormData();
   formData.append("name", state.nameInput);
   formData.append('_method', 'patch');
-  if (fileInput.value) formData.append('file', state.fileInput);
+  if (fileInput.value) formData.append('file', (state as any).fileInput);
 
-  axios.post(`${import.meta.env.VITE_API_URL}/files/${fileId}`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+  send(`${import.meta.env.VITE_API_URL}/files/${fileId}`, formData, (progress: number)=>{
+    state.progress = progress
+  }).then((response: any) => {
+    store.commit('updateFile', response.data.data);
+    router.push('/');
   })
-    .then((response) => {
-      store.commit('updateFile', response.data.data);
-      router.push('/');
-    })
 }
 
 const uploadFile = () => {
   let formData = new FormData();
-  formData.append("file", state.fileInput);
+  formData.append("file", (state as any).fileInput);
   if (nameInput.value) formData.append('name', state.nameInput);
   
-  axios.post(`${import.meta.env.VITE_API_URL}/files`, formData, {
-    headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+  send(`${import.meta.env.VITE_API_URL}/files`, formData, (progress: number) => {
+    state.progress = progress
+  }).then((response) => {
+    store.commit('addFile', response.data.data);
+    router.push('/');
   })
-    .then((response) => {
-      store.commit('addFile', response.data.data);
-      router.push('/');
-    })
 }
 
 
@@ -77,7 +73,7 @@ const uploadFile = () => {
         <button 
           v-if="fileId" 
           type="button" 
-          class="btn btn-dark mb-5 d-flex" 
+          class="btn btn-dark d-flex" 
           style="gap: 10px"
           @click="editFile()"
           :disabled="!nameInput"
@@ -88,7 +84,7 @@ const uploadFile = () => {
         <button 
           v-else 
           type="button" 
-          class="btn btn-dark mb-5 d-flex" 
+          class="btn btn-dark d-flex" 
           style="gap: 10px"
           :disabled="!fileInput"
           @click="uploadFile()"
@@ -96,6 +92,9 @@ const uploadFile = () => {
         <i class="bi bi-cloud-upload"></i>
           <span>Загрузить</span>
         </button>
+        <div v-if="progress" class="progress">
+          <div class="progress-bar" role="progressbar" :style="`width: ${progress}%`" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
       </div>
     </div>
   </div>
