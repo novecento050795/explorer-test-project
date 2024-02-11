@@ -1,4 +1,5 @@
 import 'bootstrap/scss/bootstrap.scss'
+import 'bootstrap-icons/font/bootstrap-icons.scss'
 import 'bootstrap/js/index.umd.js'
 import { createApp } from 'vue'
 import App from './App.vue'

@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import File from '@/components/File.vue'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
 const store = useStore()
 const files = computed(() => store.getters.files)
-
 </script>
 
 <template>
   <div class="explorer-main d-flex flex-column align-items-center justify-content-center">
     <div class="flex-column align-items-center justify-content-center w-50 bg-light p-5 rounded">
-      <File class="p-2" v-for="file in files" :file="file"/>
+      <button type="button" class="btn btn-dark mb-5">
+        <router-link class="d-flex text-light" :to="{ name: 'edit'}" style="text-decoration: none; gap: 10px">
+          <i class="bi bi-upload"></i>
+          <span>Загрузить файл</span>
+        </router-link>
+      </button>
+      <table class="table">
+        <tbody>
+          <File class="p-2" v-for="file in files" :file="file"/>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
