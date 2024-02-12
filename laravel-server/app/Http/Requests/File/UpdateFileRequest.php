@@ -23,7 +23,7 @@ class UpdateFileRequest extends FormRequest
     {
         return [
             'file' => 'file',
-            'name' => 'required|string'
+            'name' => 'required|string|max:8192'
         ];
     }
 }

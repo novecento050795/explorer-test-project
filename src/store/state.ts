@@ -1,5 +1,6 @@
-import type { IFile } from "@/interfaces"
+import type { IFile, IMeta } from "@/interfaces"
 
 export const state = (): {} => ({ 
-  files: [] as IFile[]
+  files: [] as IFile[],
+  meta: {} as IMeta
 })
